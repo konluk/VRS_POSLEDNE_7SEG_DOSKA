@@ -75,6 +75,8 @@ int main(void)
 	  	  if(poc==0)smer=0;
 
 	  	  LL_mDelay(500);
+
+	  	  //test github
   }
 
 }
