@@ -24,6 +24,9 @@
 #include "tim.h"
 #include "display.h"
 
+volatile uint8_t interrupt;
+volatile int menu;
+
 void SystemClock_Config(void);
 
 extern uint64_t disp_time;
@@ -58,13 +61,13 @@ int main(void)
   MX_TIM3_Init();
 
 
-
+ int test = 0;
 
 
   while (1)
   {
 
-	      vypis[0]=text[poc];
+	/*      vypis[0]=text[poc];
 	  	  vypis[1]=text[poc+1];
 	  	  vypis[2]=text[poc+2];
 	  	  vypis[3]=text[poc+3];
@@ -75,10 +78,28 @@ int main(void)
 	  	  if(poc==0)smer=0;
 
 	  	  LL_mDelay(500);
-
+*/
 	  	  //test github
-  }
+	  	if(menu==0) {
+	    	vypis[0]=1;
+	    	vypis[1]=1;
+	    	vypis[2]=1;
+	    	vypis[3]=1;
+	    }
 
+	  	if(menu==1) {
+	  		    	vypis[0]=2;
+	  		    	vypis[1]=2;
+	  		    	vypis[2]=2;
+	  		    	vypis[3]=2;
+	  		    }
+	  	if(menu==2) {
+	  		    	vypis[0]=3;
+	  		    	vypis[1]=3;
+	  		    	vypis[2]=3;
+	  		    	vypis[3]=3;
+	    }
+  }
 }
 
 /**

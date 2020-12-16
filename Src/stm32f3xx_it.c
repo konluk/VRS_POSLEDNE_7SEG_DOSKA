@@ -21,6 +21,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f3xx_it.h"
+
+#define btn_Pin LL_GPIO_PIN_3
+#define btn_GPIO_Port GPIOB
+#define btn_EXTI_IRQn EXTI3_IRQn
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -191,6 +195,63 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 1 */
 }
 
+uint8_t check_button_state(GPIO_TypeDef* PORT, uint8_t PIN)
+{
+	uint8_t button_state = 0, timeout = 0;
+
+	while(button_state < 5 && timeout < 100)
+	{
+		if(LL_GPIO_IsInputPinSet(PORT, PIN))
+		{
+			button_state += 1;
+		}
+		else
+		{
+			button_state = 0;
+		}
+
+		timeout += 1;
+		LL_mDelay(1);
+	}
+
+	if((button_state >= 5) && (timeout <= 100))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+
+void EXTI3_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI3_IRQn 0 */
+	extern uint8_t interrupt;
+	extern int menu;
+
+	if(check_button_state(btn_GPIO_Port, btn_Pin)) {
+		//interrupt ^= 1;
+
+		if(menu==2){
+			menu=0;}
+		else{
+			menu++;
+		}
+	}
+  /* USER CODE END EXTI3_IRQn 0 */
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_3) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_3);
+    /* USER CODE BEGIN LL_EXTI_LINE_3 */
+
+    /* USER CODE END LL_EXTI_LINE_3 */
+  }
+  /* USER CODE BEGIN EXTI3_IRQn 1 */
+
+  /* USER CODE END EXTI3_IRQn 1 */
+}
 /******************************************************************************/
 /* STM32F3xx Peripheral Interrupt Handlers                                    */
 /* Add here the Interrupt Handlers for the used peripherals.                  */
