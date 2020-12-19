@@ -8,6 +8,8 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include tlak_final/subdir.mk
+-include kompas/subdir.mk
 -include Startup/subdir.mk
 -include Src/subdir.mk
 -include Drivers/STM32F3xx_HAL_Driver/Src/subdir.mk
@@ -47,7 +49,7 @@ all: segment_display.elf secondary-outputs
 
 # Tool invocations
 segment_display.elf: $(OBJS) $(USER_OBJS) C:\STM_TEST\7SEG_DOSKA_FINAL\STM32F303K8TX_FLASH.ld
-	arm-none-eabi-gcc -o "segment_display.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\STM_TEST\7SEG_DOSKA_FINAL\STM32F303K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="segment_display.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "segment_display.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\STM_TEST\7SEG_DOSKA_FINAL\STM32F303K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="segment_display.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

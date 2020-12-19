@@ -22,4 +22,6 @@ SUBDIRS := \
 Drivers/STM32F3xx_HAL_Driver/Src \
 Src \
 Startup \
+kompas \
+tlak_final \
 

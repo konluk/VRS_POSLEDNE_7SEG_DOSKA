@@ -1,0 +1,5 @@
+tlak_lbs.c:11:9:lbs_read_byte	32	static
+tlak_lbs.c:18:6:lbs_write_byte	16	static
+tlak_lbs.c:24:6:lbs_readArray	24	static
+tlak_lbs.c:29:7:lbsZiskajTlak	16	static
+tlak_lbs.c:40:9:lbs_init	16	static

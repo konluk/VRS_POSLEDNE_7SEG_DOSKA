@@ -16,7 +16,10 @@ Src/display.o: ../Src/display.c ../Inc/display.h ../Inc/main.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_pwr.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_dma.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_tim.h \
- ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_gpio.h
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_gpio.h \
+ C:/STM_TEST/7SEG_DOSKA_FINAL/tlak_final/tlak_lbs.h ../Inc/main.h \
+ ../Inc/i2c.h ../Inc/vypocty.h \
+ C:/STM_TEST/7SEG_DOSKA_FINAL/kompas/lis3mdltr.h
 
 ../Inc/display.h:
 
@@ -57,3 +60,13 @@ Src/display.o: ../Src/display.c ../Inc/display.h ../Inc/main.h \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_tim.h:
 
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_gpio.h:
+
+C:/STM_TEST/7SEG_DOSKA_FINAL/tlak_final/tlak_lbs.h:
+
+../Inc/main.h:
+
+../Inc/i2c.h:
+
+../Inc/vypocty.h:
+
+C:/STM_TEST/7SEG_DOSKA_FINAL/kompas/lis3mdltr.h:

@@ -40,6 +40,11 @@ extern "C" {
 #include "stm32f3xx.h"
 #include "stm32f3xx_ll_gpio.h"
 
+#include "tlak_lbs.h"
+#include "vypocty.h"
+#include "lis3mdltr.h"
+
+
 #if defined(USE_FULL_ASSERT)
 #include "stm32_assert.h"
 #endif /* USE_FULL_ASSERT */
@@ -66,6 +71,7 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
+
 
 /* USER CODE BEGIN EFP */
 

@@ -20,12 +20,11 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "gpio.h"
-#include "tim.h"
-#include "display.h"
 
+uint8_t temp = 0;
+float mag[3], acc[3];
 volatile uint8_t interrupt;
-volatile int menu;
+volatile int menu = 3;
 
 void SystemClock_Config(void);
 
@@ -33,10 +32,10 @@ extern uint64_t disp_time;
 
 uint64_t saved_time;
 double num_to_display = 10;
-int vypis[4];
+int vypis[5];
 int poc = 0;
 int smer = 0;
-int text[50] = {'L','U','K','A','S','_','K','O','N','C','A','L','_',8,6,1,1,9};
+char text[50];
 
 int main(void)
 {
@@ -52,60 +51,162 @@ int main(void)
 
   setSegments();
   setDigits();
-
   LL_mDelay(2000);
-
   resetDigits();
   resetSegments();
 
   MX_TIM3_Init();
+  MX_I2C1_Init();
 
+  lis3mdl_init();
+  lbs_init();
 
- int test = 0;
+  char tmp_arr[50];
 
+  int i = 0;
+  int c = 0;
+
+  float tlak = 0;
+  float nad_vysk = 0;
+  float azimut = 0;
+  float teplota = 0;
 
   while (1)
   {
 
-	/*      vypis[0]=text[poc];
-	  	  vypis[1]=text[poc+1];
-	  	  vypis[2]=text[poc+2];
-	  	  vypis[3]=text[poc+3];
+	  //CITANIE SENZOROV
 
-	  	  if(smer==0){poc++;}else{poc--;}
+	  azimut = ziskajAzimut();
+	  tlak = lbsZiskajTlak();
+	  nad_vysk = ziskajNadVysku(tlak);
+	  teplota = ziskajTeplotu();
 
-	  	  if(poc==14)smer=1;
-	  	  if(poc==0)smer=0;
+	  //MENU
+	  if(menu==0) {
+		snprintf(tmp_arr, sizeof(tmp_arr), "%.2fQ", tlak);
+	  	text[0]='B';
+	  	text[1]='A';
+	  	text[2]='R';
+	  	text[3]='_';
 
-	  	  LL_mDelay(500);
-*/
-	  	  //test github
-	  	if(menu==0) {
-	    	vypis[0]=1;
-	    	vypis[1]=1;
-	    	vypis[2]=1;
-	    	vypis[3]=1;
-	    }
+	  	i=0;
+	  	c=0;
+	  	while(1){
+	  		if(tmp_arr[i] == 'Q')break;
 
-	  	if(menu==1) {
-	  		    	vypis[0]=2;
-	  		    	vypis[1]=2;
-	  		    	vypis[2]=2;
-	  		    	vypis[3]=2;
-	  		    }
-	  	if(menu==2) {
-	  		    	vypis[0]=3;
-	  		    	vypis[1]=3;
-	  		    	vypis[2]=3;
-	  		    	vypis[3]=3;
-	    }
+	  		if(tmp_arr[i+1]=='.'){
+	  			text[c+4]=tmp_arr[i]+100;
+	  			i++;
+	  		}else{
+	  			text[c+4]=tmp_arr[i];
+	  		}
+	  		i++;
+	  		c++;
+	  	}
+	  	text[c+4]='Q';
+	  }
+
+	  if(menu==1) {
+	 		snprintf(tmp_arr, sizeof(tmp_arr), "%.1fQ", nad_vysk);
+	 	  	text[0]='A';
+	 	  	text[1]='L';
+	 	  	text[2]='T';
+	 	  	text[3]='_';
+
+	 	  	i=0;
+	 	  	c=0;
+	 	  	while(1){
+	 	  		if(tmp_arr[i] == 'Q')break;
+
+	 	  		if(tmp_arr[i+1]=='.'){
+	 	  			text[c+4]=tmp_arr[i]+100;
+	 	  			i++;
+	 	  		}else{
+	 	  			text[c+4]=tmp_arr[i];
+	 	  		}
+	 	  		i++;
+	 	  		c++;
+	 	  	}
+	 	  	text[c+4]='Q';
+	 	  }
+
+	  if(menu==2) {
+	  	 		snprintf(tmp_arr, sizeof(tmp_arr), "%.1fQ", azimut);
+	  	 	  	text[0]='M';
+	  	 	  	text[1]='A';
+	  	 	  	text[2]='G';
+	  	 	  	text[3]='_';
+
+	  	 	  	i=0;
+	  	 	  	c=0;
+	  	 	  	while(1){
+	  	 	  		if(tmp_arr[i] == 'Q')break;
+
+	  	 	  		if(tmp_arr[i+1]=='.'){
+	  	 	  			text[c+4]=tmp_arr[i]+100;
+	  	 	  			i++;
+	  	 	  		}else{
+	  	 	  			text[c+4]=tmp_arr[i];
+	  	 	  		}
+	  	 	  		i++;
+	  	 	  		c++;
+	  	 	  	}
+	  	 	  	text[c+4]='Q';
+	  	 	  }
+
+	  if(menu==3) {
+	  	  	 		snprintf(tmp_arr, sizeof(tmp_arr), "%.1fQ", teplota);
+	  	  	 	  	text[0]='T';
+	  	  	 	  	text[1]='E';
+	  	  	 	  	text[2]='M';
+	  	  	 	  	text[3]='P';
+	  	  	 	  	text[4]='_';
+
+	  	  	 	  	i=0;
+	  	  	 	  	c=0;
+	  	  	 	  	while(1){
+	  	  	 	  		if(tmp_arr[i] == 'Q')break;
+
+	  	  	 	  		if(tmp_arr[i+1]=='.'){
+	  	  	 	  			text[c+5]=tmp_arr[i]+100;
+	  	  	 	  			i++;
+	  	  	 	  		}else{
+	  	  	 	  			text[c+5]=tmp_arr[i];
+	  	  	 	  		}
+	  	  	 	  		i++;
+	  	  	 	  		c++;
+	  	  	 }
+	  	  	 text[c+5]='Q';
+	  }
+
+	  //VYPIS
+	  vypis[0]=text[poc];
+	  vypis[1]=text[poc+1];
+	  vypis[2]=text[poc+2];
+	  vypis[3]=text[poc+3];
+	  vypis[4]=text[poc+4];
+
+	  if(vypis[4]==81){smer=1;}
+	  if(poc==0)smer=0;
+	  if(smer==0){poc++;}else{poc--;}
+
+	  LL_mDelay(500);
+
   }
+
+
+
 }
+
 
 /**
   * @brief System Clock Configuration
   * @retval None
   */
+
+
+
+
 void SystemClock_Config(void)
 {
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);

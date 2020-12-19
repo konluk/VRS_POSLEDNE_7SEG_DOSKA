@@ -1,0 +1,3 @@
+vypocty.c:5:7:ziskajNadVysku	24	static
+vypocty.c:11:7:ziskajAzimut	32	static
+vypocty.c:19:7:ziskajTeplotu	16	static

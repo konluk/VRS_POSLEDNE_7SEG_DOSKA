@@ -234,7 +234,7 @@ void EXTI3_IRQHandler(void)
 	if(check_button_state(btn_GPIO_Port, btn_Pin)) {
 		//interrupt ^= 1;
 
-		if(menu==2){
+		if(menu==3){
 			menu=0;}
 		else{
 			menu++;
